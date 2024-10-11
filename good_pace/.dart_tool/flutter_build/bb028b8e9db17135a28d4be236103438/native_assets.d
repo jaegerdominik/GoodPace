@@ -1,0 +1,1 @@
+ C:\\Users\\domin\\AndroidStudioProjects\\GoodPace\\good_pace\\.dart_tool\\flutter_build\\bb028b8e9db17135a28d4be236103438\\native_assets.yaml: 
