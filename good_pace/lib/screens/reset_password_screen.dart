@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/data/provider/default_provider.dart';
 import 'package:flutter_app/helper/spacer.dart';
 import 'package:flutter_app/widgets/button_widget.dart';
+import 'package:flutter_app/widgets/text_form_label_widget.dart';
 import 'package:flutter_app/widgets/text_form_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -21,29 +22,23 @@ class ResetPasswordScreen extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(
-          color: Colors.black, //change your color here
+          color: Color(0xFFFFAFD4), //change your color here
         ),
         elevation: 0.5,
         centerTitle: true,
         backgroundColor: Colors.white,
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: const [
-            SizedBox(
-              width: 40,
-              height: 40,
-              child: Image(
-                image: AssetImage('assets/logo/logo_large.png'),
-              ),
-            ),
             Text(
-              "DINDER",
-              style: TextStyle(color: Color(0xFFA93226)),
+              "Passwort vergessen",
+              style: TextStyle(color: Color(0xFFFFAFD4)),
+              textAlign: TextAlign.left,
             )
           ],
         ),
       ),
-      body: Padding(
+      body: Container(
+        color: const Color(0xFFDEF1FF),
         padding: const EdgeInsets.all(30.0),
         child: Column(
           children: [
@@ -58,6 +53,10 @@ class ResetPasswordScreen extends HookConsumerWidget {
                         key: _formKey.value,
                         child: Column(
                           children: [
+                            TextFormLabelWidget(
+                              icon: "assets/logo/logo.png",
+                              labelText: "E-Mail",
+                            ),
                             TextFormWidget(
                               hintText: "E-Mail",
                               errorMessage: "Enter a valid e-mail",
@@ -75,6 +74,10 @@ class ResetPasswordScreen extends HookConsumerWidget {
                               },
                             ),
                             const SpacerSmall(),
+                            TextFormLabelWidget(
+                              icon: "assets/logo/logo.png",
+                              labelText: "Passwort",
+                            ),
                             TextFormWidget(
                               hintText: "Password",
                               errorMessage: "The passwords do not match",
@@ -92,6 +95,10 @@ class ResetPasswordScreen extends HookConsumerWidget {
                               },
                             ),
                             const SpacerSmall(),
+                            TextFormLabelWidget(
+                              icon: "assets/logo/logo.png",
+                              labelText: "Neues Passwort bestätigen",
+                            ),
                             TextFormWidget(
                               hintText: "Confirm Password",
                               errorMessage: "The passwords do not match",

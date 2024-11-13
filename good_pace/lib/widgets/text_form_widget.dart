@@ -23,7 +23,7 @@ class TextFormWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomRoundedCard(
-      color: const Color(0xFFE5E5E5),
+      color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: TextFormField(

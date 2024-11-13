@@ -15,7 +15,7 @@ class ButtonWidget extends StatelessWidget {
       splashColor: Colors.pink,
       onTap: onClick,
       child: CustomRoundedCard(
-          color: Color(0xFFE5E5E5),
+          color: Color(0xFF76D1FF),
           child: SizedBox(
             width: double.infinity,
             child: Padding(

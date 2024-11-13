@@ -4,8 +4,8 @@ import 'package:flutter_app/widgets/log_in_widget.dart';
 import 'package:flutter_app/widgets/register_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class LogInScreen extends HookWidget {
-  const LogInScreen({Key? key}) : super(key: key);
+class RegisterScreen extends HookWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +15,13 @@ class LogInScreen extends HookWidget {
         elevation: 0.5,
         centerTitle: true,
         backgroundColor: Colors.white,
+        iconTheme: const IconThemeData(
+          color: Color(0xFFFFAFD4), //change your color here
+        ),
         title: Row(
           children: const [
             Text(
-              "Anmeldung",
+              "Registrierung",
               style: TextStyle(color: Color(0xFFFFAFD4)),
             )
           ],
@@ -31,7 +34,7 @@ class LogInScreen extends HookWidget {
             Expanded(
               child: TabBarView(
                 children: [
-                  LogInWidget(),
+                  RegisterWidget(),
                 ],
               ),
             ),
