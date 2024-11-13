@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/helper/spacer.dart';
-import 'package:flutter_app/screens/swipe_screen.dart';
+import 'package:flutter_app/screens/dashboard_screen.dart';
 import 'package:flutter_app/widgets/text_form_label_widget.dart';
 import 'package:flutter_app/widgets/text_form_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -105,7 +105,7 @@ class RegisterWidget extends HookWidget {
                       if (_formKey.value.currentState!.validate()) {
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => SwipeScreen()),
+                          MaterialPageRoute(builder: (context) => DashboardScreen()),
                         );
                       }
                     },

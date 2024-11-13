@@ -5,7 +5,36 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="80cb945c-4c3d-49ba-a812-9821c276821c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/good_pace/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/good_pace/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/good_pace/.dart_tool/flutter_build/bb028b8e9db17135a28d4be236103438/.filecache" beforeDir="false" afterPath="$PROJECT_DIR$/good_pace/.dart_tool/flutter_build/bb028b8e9db17135a28d4be236103438/.filecache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/good_pace/.dart_tool/flutter_build/bb028b8e9db17135a28d4be236103438/app.dill" beforeDir="false" afterPath="$PROJECT_DIR$/good_pace/.dart_tool/flutter_build/bb028b8e9db17135a28d4be236103438/app.dill" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/good_pace/.dart_tool/flutter_build/bb028b8e9db17135a28d4be236103438/debug_android_application.stamp" beforeDir="false" afterPath="$PROJECT_DIR$/good_pace/.dart_tool/flutter_build/bb028b8e9db17135a28d4be236103438/debug_android_application.stamp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/good_pace/.dart_tool/flutter_build/bb028b8e9db17135a28d4be236103438/flutter_assets.d" beforeDir="false" afterPath="$PROJECT_DIR$/good_pace/.dart_tool/flutter_build/bb028b8e9db17135a28d4be236103438/flutter_assets.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/good_pace/.dart_tool/flutter_build/bb028b8e9db17135a28d4be236103438/kernel_snapshot_program.d" beforeDir="false" afterPath="$PROJECT_DIR$/good_pace/.dart_tool/flutter_build/bb028b8e9db17135a28d4be236103438/kernel_snapshot_program.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/good_pace/.dart_tool/flutter_build/bb028b8e9db17135a28d4be236103438/kernel_snapshot_program.stamp" beforeDir="false" afterPath="$PROJECT_DIR$/good_pace/.dart_tool/flutter_build/bb028b8e9db17135a28d4be236103438/kernel_snapshot_program.stamp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/good_pace/.dart_tool/flutter_build/bb028b8e9db17135a28d4be236103438/outputs.json" beforeDir="false" afterPath="$PROJECT_DIR$/good_pace/.dart_tool/flutter_build/bb028b8e9db17135a28d4be236103438/outputs.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/good_pace/.dart_tool/flutter_build/bb028b8e9db17135a28d4be236103438/program.dill" beforeDir="false" afterPath="$PROJECT_DIR$/good_pace/.dart_tool/flutter_build/bb028b8e9db17135a28d4be236103438/program.dill" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/good_pace/android/.gradle/8.3/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/good_pace/android/.gradle/8.3/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/good_pace/android/.gradle/8.3/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/good_pace/android/.gradle/8.3/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/good_pace/android/.gradle/8.3/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/good_pace/android/.gradle/8.3/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/good_pace/android/.gradle/8.3/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/good_pace/android/.gradle/8.3/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/good_pace/android/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/good_pace/android/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/good_pace/build/app/intermediates/assets/debug/flutter_assets/AssetManifest.bin" beforeDir="false" afterPath="$PROJECT_DIR$/good_pace/build/app/intermediates/assets/debug/flutter_assets/AssetManifest.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/good_pace/build/app/intermediates/assets/debug/flutter_assets/AssetManifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/good_pace/build/app/intermediates/assets/debug/flutter_assets/AssetManifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/good_pace/build/app/intermediates/assets/debug/flutter_assets/kernel_blob.bin" beforeDir="false" afterPath="$PROJECT_DIR$/good_pace/build/app/intermediates/assets/debug/flutter_assets/kernel_blob.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/good_pace/build/app/intermediates/flutter/debug/flutter_assets/AssetManifest.bin" beforeDir="false" afterPath="$PROJECT_DIR$/good_pace/build/app/intermediates/flutter/debug/flutter_assets/AssetManifest.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/good_pace/build/app/intermediates/flutter/debug/flutter_assets/AssetManifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/good_pace/build/app/intermediates/flutter/debug/flutter_assets/AssetManifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/good_pace/build/app/intermediates/flutter/debug/flutter_assets/kernel_blob.bin" beforeDir="false" afterPath="$PROJECT_DIR$/good_pace/build/app/intermediates/flutter/debug/flutter_assets/kernel_blob.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/good_pace/build/app/intermediates/flutter/debug/flutter_build.d" beforeDir="false" afterPath="$PROJECT_DIR$/good_pace/build/app/intermediates/flutter/debug/flutter_build.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/good_pace/build/app/intermediates/incremental/packageDebug/tmp/debug/dex-renamer-state.txt" beforeDir="false" afterPath="$PROJECT_DIR$/good_pace/build/app/intermediates/incremental/packageDebug/tmp/debug/dex-renamer-state.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/good_pace/build/app/outputs/apk/debug/app-debug.apk" beforeDir="false" afterPath="$PROJECT_DIR$/good_pace/build/app/outputs/apk/debug/app-debug.apk" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/good_pace/build/app/outputs/flutter-apk/app-debug.apk" beforeDir="false" afterPath="$PROJECT_DIR$/good_pace/build/app/outputs/flutter-apk/app-debug.apk" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/good_pace/build/app/outputs/flutter-apk/app-debug.apk.sha1" beforeDir="false" afterPath="$PROJECT_DIR$/good_pace/build/app/outputs/flutter-apk/app-debug.apk.sha1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/good_pace/build/f872507f30e2ff2523f0f1d19160266e.cache.dill.track.dill" beforeDir="false" afterPath="$PROJECT_DIR$/good_pace/build/f872507f30e2ff2523f0f1d19160266e.cache.dill.track.dill" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/good_pace/lib/screens/swipe_screen.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/good_pace/lib/widgets/log_in_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/good_pace/lib/widgets/log_in_widget.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/good_pace/lib/widgets/register_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/good_pace/lib/widgets/register_widget.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,6 +43,13 @@
   </component>
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Dart File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -26,25 +62,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Flutter.main.dart.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "RunOnceActivity.readMode.enableVisualFormatting": "true",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "main",
-    "io.flutter.reload.alreadyRun": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/domin/AndroidStudioProjects/GoodPace/good_pace",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.17",
-    "project.structure.side.proportion": "0.2",
-    "show.migrate.to.gradle.popup": "false"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Flutter.main.dart.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;io.flutter.reload.alreadyRun&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/domin/AndroidStudioProjects/GoodPace/good_pace&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.17&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\domin\AndroidStudioProjects\GoodPace\good_pace" />

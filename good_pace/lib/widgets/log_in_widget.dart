@@ -4,7 +4,7 @@ import 'package:flutter_app/data/provider/default_provider.dart';
 import 'package:flutter_app/helper/spacer.dart';
 import 'package:flutter_app/screens/register_screen.dart';
 import 'package:flutter_app/screens/reset_password_screen.dart';
-import 'package:flutter_app/screens/swipe_screen.dart';
+import 'package:flutter_app/screens/dashboard_screen.dart';
 import 'package:flutter_app/widgets/button_widget.dart';
 import 'package:flutter_app/widgets/custom_rounded_card.dart';
 import 'package:flutter_app/widgets/text_form_label_widget.dart';
@@ -117,7 +117,7 @@ class LogInWidget extends HookConsumerWidget {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const SwipeScreen()),
+                                    builder: (context) => const DashboardScreen()),
                               );
                             }
                           },
