@@ -1,4 +1,4 @@
-#Wed Nov 13 17:15:41 CET 2024
+#Sat Dec 21 11:37:00 CET 2024
 base.0=C\:\\Users\\domin\\AndroidStudioProjects\\GoodPace\\good_pace\\build\\app\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
 base.1=C\:\\Users\\domin\\AndroidStudioProjects\\GoodPace\\good_pace\\build\\app\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
 base.2=C\:\\Users\\domin\\AndroidStudioProjects\\GoodPace\\good_pace\\build\\app\\intermediates\\dex\\debug\\mergeProjectDexDebug\\1\\classes.dex

@@ -6,7 +6,7 @@ import 'package:flutter_app/data/dto/user.dart';
 import 'package:flutter_app/data/provider/default_provider.dart';
 import 'package:flutter_app/helper/spacer.dart';
 import 'package:flutter_app/screens/log_in_screen.dart';
-import 'package:flutter_app/screens/matches_screen.dart';
+import 'package:flutter_app/screens/training_screen.dart';
 import 'package:flutter_app/screens/profile_edit_screen.dart';
 import 'package:flutter_app/widgets/bottom_nav_bar.dart';
 import 'package:flutter_app/widgets/custom_rounded_card.dart';
@@ -14,6 +14,8 @@ import 'package:flutter_app/widgets/personal_information_widget.dart';
 import 'package:flutter_app/widgets/popup/match_popup.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import 'knowledge_screen.dart';
 
 class DashboardScreen extends HookConsumerWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -34,10 +36,10 @@ class DashboardScreen extends HookConsumerWidget {
         case 0:
           break;
         case 1:
-          Navigator.push(context, MaterialPageRoute(builder: (context) => LogInScreen()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => KnowledgeScreen()));
           break;
         case 2:
-          Navigator.push(context, MaterialPageRoute(builder: (context) => MatchesScreen()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => TrainingScreen()));
           break;
         case 3:
           Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileEditScreen()));
@@ -99,7 +101,7 @@ class DashboardScreen extends HookConsumerWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const MatchesScreen()),
+                      builder: (context) => const TrainingScreen()),
                 ),
               },
             ),
