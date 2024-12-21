@@ -275,43 +275,37 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
           ],
         ),
         const SizedBox(height: 8),
-        Row(
+        Column(
           children: [
-            Expanded(
-              child: RadioListTile<String>(
-                title: const Text("Männlich"),
-                value: "männlich",
-                groupValue: gender,
-                onChanged: (value) {
-                  setState(() {
-                    gender = value;
-                  });
-                },
-              ),
+            RadioListTile<String>(
+              title: const Text("Männlich"),
+              value: "männlich",
+              groupValue: gender,
+              onChanged: (value) {
+                setState(() {
+                  gender = value;
+                });
+              },
             ),
-            Expanded(
-              child: RadioListTile<String>(
-                title: const Text("Weiblich"),
-                value: "weiblich",
-                groupValue: gender,
-                onChanged: (value) {
-                  setState(() {
-                    gender = value;
-                  });
-                },
-              ),
+            RadioListTile<String>(
+              title: const Text("Weiblich"),
+              value: "weiblich",
+              groupValue: gender,
+              onChanged: (value) {
+                setState(() {
+                  gender = value;
+                });
+              },
             ),
-            Expanded(
-              child: RadioListTile<String>(
-                title: const Text("Divers"),
-                value: "divers",
-                groupValue: gender,
-                onChanged: (value) {
-                  setState(() {
-                    gender = value;
-                  });
-                },
-              ),
+            RadioListTile<String>(
+              title: const Text("Divers"),
+              value: "divers",
+              groupValue: gender,
+              onChanged: (value) {
+                setState(() {
+                  gender = value;
+                });
+              },
             ),
           ],
         ),
