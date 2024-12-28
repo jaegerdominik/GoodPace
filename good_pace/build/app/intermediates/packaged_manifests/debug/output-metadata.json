@@ -4,7 +4,7 @@
     "type": "PACKAGED_MANIFESTS",
     "kind": "Directory"
   },
-  "applicationId": "com.example.good_pace",
+  "applicationId": "at.fhj.goodpace",
   "variantName": "debug",
   "elements": [
     {

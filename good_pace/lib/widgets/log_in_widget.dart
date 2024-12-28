@@ -6,7 +6,7 @@ import 'package:flutter_app/screens/register_screen.dart';
 import 'package:flutter_app/screens/reset_password_screen.dart';
 import 'package:flutter_app/screens/dashboard_screen.dart';
 import 'package:flutter_app/widgets/button_widget.dart';
-import 'package:flutter_app/widgets/custom_rounded_card.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_app/widgets/text_form_label_widget.dart';
 import 'package:flutter_app/widgets/text_form_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -19,9 +19,28 @@ class LogInWidget extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final _formKey = useState(GlobalKey<FormState>());
     final userNameTextEditController = useState(TextEditingController());
+    final passwordController = useState(TextEditingController());
+    final auth = FirebaseAuth.instance;
     final userData = ref.watch(userProvider);
+
+    Future<void> _login() async {
+      try {
+        final email = userNameTextEditController.value.text.trim();
+        final password = passwordController.value.text.trim();
+        await auth.signInWithEmailAndPassword(email: email, password: password);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const DashboardScreen()),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Login fehlgeschlagen: $e')),
+        );
+      }
+    }
+
     return Container(
-      color: Color(0xFFDEF1FF),
+      color: const Color(0xFFDEF1FF),
       padding: const EdgeInsets.all(30.0),
       child: Column(
         mainAxisSize: MainAxisSize.max,
@@ -41,7 +60,7 @@ class LogInWidget extends HookConsumerWidget {
                           SizedBox(
                             width: 240,
                             height: 240,
-                            child: Image(
+                            child: const Image(
                               image: AssetImage('assets/logo/logo.png'),
                             ),
                           ),
@@ -52,7 +71,7 @@ class LogInWidget extends HookConsumerWidget {
                           TextFormWidget(
                             hintText: "user@gmail.com",
                             errorMessage: "Please enter a valid email",
-                            onSubmit: (String) {},
+                            onSubmit: (value) {},
                             textEditingController: userNameTextEditController.value,
                             validation: (val) {
                               if (val.isEmpty) {
@@ -69,20 +88,13 @@ class LogInWidget extends HookConsumerWidget {
                             hintText: "Password",
                             errorMessage: "Your Password was incorrect",
                             obscureText: true,
-                            onSubmit: (value) => {},
+                            onSubmit: (value) {},
+                            textEditingController: passwordController.value,
                             validation: (val) {
                               if (val.isEmpty) {
                                 return "Please enter a Password";
-                              } else if (!userData.any((element) =>
-                              element.email == userNameTextEditController.value.text)) {
-                                return "Password or Username incorrect";
-                              } else if (userData
-                                  .firstWhere((element) =>
-                              element.email == userNameTextEditController.value.text)
-                                  .password == val) {
-                                return null;
                               }
-                              return "Password or Username incorrect";
+                              return null;
                             },
                           ),
                         ],
@@ -95,7 +107,8 @@ class LogInWidget extends HookConsumerWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const ResetPasswordScreen()),
+                                  builder: (context) =>
+                                  const ResetPasswordScreen()),
                             );
                           },
                           child: const Text("Forgot Password"),
@@ -114,11 +127,7 @@ class LogInWidget extends HookConsumerWidget {
                           text: "Continue",
                           onClick: () {
                             if (_formKey.value.currentState!.validate()) {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const DashboardScreen()),
-                              );
+                              _login();
                             }
                           },
                         )

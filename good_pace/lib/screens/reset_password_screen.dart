@@ -1,40 +1,48 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/data/provider/default_provider.dart';
 import 'package:flutter_app/helper/spacer.dart';
 import 'package:flutter_app/widgets/button_widget.dart';
 import 'package:flutter_app/widgets/text_form_label_widget.dart';
 import 'package:flutter_app/widgets/text_form_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class ResetPasswordScreen extends HookConsumerWidget {
+class ResetPasswordScreen extends HookWidget {
   const ResetPasswordScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final _formKey = useState(GlobalKey<FormState>());
-    final userNameTextEditController = useState(TextEditingController());
-    final passwordTextEditController = useState(TextEditingController());
-    final confirmPasswordTextTextEditController =
-        useState(TextEditingController());
-    final userData = ref.watch(userProvider);
+    final emailController = useState(TextEditingController());
+    final auth = FirebaseAuth.instance;
+
+    Future<void> _resetPassword() async {
+      try {
+        final email = emailController.value.text.trim();
+        await auth.sendPasswordResetEmail(email: email);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Passwort-Reset-E-Mail gesendet')),
+        );
+        Navigator.pop(context);
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Fehler beim Senden der E-Mail: $e')),
+        );
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(
-          color: Color(0xFFFFAFD4), //change your color here
+          color: Color(0xFFFFAFD4),
         ),
         elevation: 0.5,
         centerTitle: true,
         backgroundColor: Colors.white,
-        title: Row(
-          children: const [
-            Text(
-              "Passwort vergessen",
-              style: TextStyle(color: Color(0xFFFFAFD4)),
-              textAlign: TextAlign.left,
-            )
-          ],
+        title: const Text(
+          "Passwort vergessen",
+          style: TextStyle(color: Color(0xFFFFAFD4)),
+          textAlign: TextAlign.left,
         ),
       ),
       body: Container(
@@ -58,60 +66,17 @@ class ResetPasswordScreen extends HookConsumerWidget {
                               labelText: "E-Mail",
                             ),
                             TextFormWidget(
-                              hintText: "E-Mail",
+                              hintText: "user@gmail.com",
                               errorMessage: "Enter a valid e-mail",
                               onSubmit: (value) {},
-                              textEditingController: userNameTextEditController.value,
+                              textEditingController: emailController.value,
                               validation: (val) {
                                 if (val.isEmpty) {
-                                  return "Please enter a Email";
-                                } else if (!userData.any((element) =>
-                                    element.email ==
-                                    userNameTextEditController.value.text)) {
-                                  return "Email doesn't exist";
-                                }
-                                return null;
-                              },
-                            ),
-                            const SpacerSmall(),
-                            TextFormLabelWidget(
-                              icon: "assets/logo/logo.png",
-                              labelText: "Passwort",
-                            ),
-                            TextFormWidget(
-                              hintText: "Password",
-                              errorMessage: "The passwords do not match",
-                              onSubmit: (value) {},
-                              obscureText: true,
-                              textEditingController: passwordTextEditController.value,
-                              validation: (val) {
-                                if (val.isEmpty) {
-                                  return "Please Enter a Password";
-                                } else if (passwordTextEditController.value.text !=
-                                    confirmPasswordTextTextEditController.value.text) {
-                                  return "Passwords doesn't Match";
-                                }
-                                return null;
-                              },
-                            ),
-                            const SpacerSmall(),
-                            TextFormLabelWidget(
-                              icon: "assets/logo/logo.png",
-                              labelText: "Neues Passwort bestätigen",
-                            ),
-                            TextFormWidget(
-                              hintText: "Confirm Password",
-                              errorMessage: "The passwords do not match",
-                              obscureText: true,
-                              onSubmit: (value) {},
-                              textEditingController:
-                                  confirmPasswordTextTextEditController.value,
-                              validation: (val) {
-                                if (val.isEmpty) {
-                                  return "Please Enter a Password";
-                                } else if (passwordTextEditController.value.text !=
-                                    confirmPasswordTextTextEditController.value.text) {
-                                  return "Passwords doesn't Match";
+                                  return "Bitte geben Sie eine E-Mail ein.";
+                                } else if (!RegExp(
+                                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                    .hasMatch(val)) {
+                                  return "Ungültige E-Mail-Adresse.";
                                 }
                                 return null;
                               },
@@ -122,21 +87,10 @@ class ResetPasswordScreen extends HookConsumerWidget {
                       Column(
                         children: [
                           ButtonWidget(
-                            text: "Continue",
+                            text: "Passwort zurücksetzen",
                             onClick: () {
                               if (_formKey.value.currentState!.validate()) {
-                                var userIndex = userData.indexOf(userData
-                                    .where((element) =>
-                                        element.email ==
-                                        userNameTextEditController.value.text)
-                                    .first);
-
-                                userData.add(userData[userIndex].copyWith(
-                                  password: passwordTextEditController.value.text,
-                                ));
-                                userData.removeAt(userIndex);
-
-                                Navigator.pop(context);
+                                _resetPassword();
                               }
                             },
                           ),

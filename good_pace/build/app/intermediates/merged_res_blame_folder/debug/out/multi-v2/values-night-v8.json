@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.good_pace.app-mergeDebugResources-24:/values-night-v8/values-night-v8.xml",
+            "outputFile": "at.fhj.goodpace.app-mergeDebugResources-29:/values-night-v8/values-night-v8.xml",
             "map": [
                 {
                     "source": "C:\\Users\\domin\\AndroidStudioProjects\\GoodPace\\good_pace\\android\\app\\src\\main\\res\\values-night\\styles.xml",

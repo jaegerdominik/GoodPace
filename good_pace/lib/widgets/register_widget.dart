@@ -5,6 +5,7 @@ import 'package:flutter_app/screens/dashboard_screen.dart';
 import 'package:flutter_app/widgets/text_form_label_widget.dart';
 import 'package:flutter_app/widgets/text_form_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'button_widget.dart';
 
 class RegisterWidget extends HookWidget {
@@ -15,8 +16,26 @@ class RegisterWidget extends HookWidget {
     final _formKey = useState(GlobalKey<FormState>());
     final userNameTextEditController = useState(TextEditingController());
     final passwordTextEditController = useState(TextEditingController());
-    final confirmPasswordTextTextEditController =
-    useState(TextEditingController());
+    final confirmPasswordTextTextEditController = useState(TextEditingController());
+    final auth = FirebaseAuth.instance;
+
+    Future<void> _register() async {
+      try {
+        final email = userNameTextEditController.value.text.trim();
+        final password = passwordTextEditController.value.text.trim();
+
+        await auth.createUserWithEmailAndPassword(email: email, password: password);
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => DashboardScreen()),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Registrierung fehlgeschlagen: $e')),
+        );
+      }
+    }
 
     return Container(
       color: const Color(0xFFDEF1FF),
@@ -82,8 +101,7 @@ class RegisterWidget extends HookWidget {
                       errorMessage: "The passwords do not match",
                       obscureText: true,
                       onSubmit: (val) {},
-                      textEditingController:
-                      confirmPasswordTextTextEditController.value,
+                      textEditingController: confirmPasswordTextTextEditController.value,
                       validation: (val) {
                         if (val.isEmpty) {
                           return "Please confirm your password";
@@ -103,10 +121,7 @@ class RegisterWidget extends HookWidget {
                     text: "Registrieren",
                     onClick: () {
                       if (_formKey.value.currentState!.validate()) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => DashboardScreen()),
-                        );
+                        _register();
                       }
                     },
                   ),
