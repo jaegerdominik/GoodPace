@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/user/user_service.dart';
 import '../widgets/bottom_nav_bar.dart';
 import 'dashboard_screen.dart';
 import 'knowledge_screen.dart';
@@ -12,18 +13,105 @@ class ProfileEditScreen extends StatefulWidget {
 }
 
 class _ProfileEditScreenState extends State<ProfileEditScreen> {
-  String? gender = "männlich";
-  String? language = "Deutsch";
+  final UserService _userService = UserService();
 
-  final TextEditingController firstNameController = TextEditingController(text: "Max");
-  final TextEditingController lastNameController = TextEditingController(text: "Mustermann");
-  final TextEditingController emailController = TextEditingController(text: "max.mustermann@example.com");
-  final TextEditingController streetController = TextEditingController(text: "Musterstraße 123");
-  final TextEditingController postalCodeController = TextEditingController(text: "12345");
-  final TextEditingController cityController = TextEditingController(text: "Musterstadt");
-  final TextEditingController birthDateController = TextEditingController(text: "01.01.1990");
-  final TextEditingController phoneNumberController = TextEditingController(text: "+491234567890");
-  final TextEditingController passwordController = TextEditingController(text: "password123");
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController streetController = TextEditingController();
+  final TextEditingController houseNumberController = TextEditingController();
+  final TextEditingController postalCodeController = TextEditingController();
+  final TextEditingController cityController = TextEditingController();
+  final TextEditingController birthDateController = TextEditingController();
+  final TextEditingController phoneNumberController = TextEditingController();
+
+  String? gender = "männlich";
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    try {
+      final currentUserEmail = _userService.getCurrentUserEmail();
+      if (currentUserEmail == null) {
+        throw Exception("Kein angemeldeter Benutzer gefunden.");
+      }
+
+      emailController.text = currentUserEmail;
+
+      final userData = await _userService.getUserData(currentUserEmail);
+
+      if (userData != null) {
+        setState(() {
+          firstNameController.text = userData['firstName'] ?? '';
+          lastNameController.text = userData['lastName'] ?? '';
+          streetController.text = userData['street'] ?? '';
+          houseNumberController.text = userData['houseNumber'] ?? '';
+          postalCodeController.text = userData['postalCode'] ?? '';
+          cityController.text = userData['city'] ?? '';
+          birthDateController.text = userData['birthDate'] ?? '';
+          phoneNumberController.text = userData['phoneNumber'] ?? '';
+          gender = userData['gender'] ?? 'männlich';
+        });
+      }
+    } catch (e) {
+      print('Keine Daten gefunden. Zeige Dummy-Daten.');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _saveUserData() async {
+    try {
+      final currentUserEmail = _userService.getCurrentUserEmail();
+      if (currentUserEmail == null) {
+        throw Exception("Kein angemeldeter Benutzer gefunden.");
+      }
+
+      await _userService.saveUserData(
+        email: currentUserEmail,
+        firstName: firstNameController.text.isEmpty
+            ? "Max"
+            : firstNameController.text,
+        lastName: lastNameController.text.isEmpty
+            ? "Mustermann"
+            : lastNameController.text,
+        street: streetController.text.isEmpty
+            ? "Musterstraße"
+            : streetController.text,
+        houseNumber: houseNumberController.text.isEmpty
+            ? "1"
+            : houseNumberController.text,
+        postalCode: postalCodeController.text.isEmpty
+            ? "12345"
+            : postalCodeController.text,
+        city: cityController.text.isEmpty
+            ? "Musterstadt"
+            : cityController.text,
+        birthDate: birthDateController.text.isEmpty
+            ? "01.01.2000"
+            : birthDateController.text,
+        gender: gender ?? 'männlich',
+        phoneNumber: phoneNumberController.text.isEmpty
+            ? "+49123456789"
+            : phoneNumberController.text,
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Profil erfolgreich gespeichert!')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Fehler beim Speichern des Profils: $e')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +133,9 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
         child: Container(
           color: const Color(0xFFDEF1FF),
           padding: const EdgeInsets.all(16.0),
@@ -63,25 +153,41 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                 label: "Vorname",
                 icon: Icons.directions_run,
                 controller: firstNameController,
-                hint: "Geben Sie Ihren Vornamen ein",
+                hint: "Max",
               ),
               _buildInputField(
                 label: "Nachname",
                 icon: Icons.directions_run,
                 controller: lastNameController,
-                hint: "Geben Sie Ihren Nachnamen ein",
+                hint: "Mustermann",
               ),
               _buildInputField(
                 label: "E-Mail",
                 icon: Icons.mail,
                 controller: emailController,
-                hint: "Geben Sie Ihre E-Mail ein",
+                hint: "test@example.com",
+                isEnabled: false,
               ),
-              _buildInputField(
-                label: "Straße und Hausnummer",
-                icon: Icons.home,
-                controller: streetController,
-                hint: "Geben Sie Ihre Straße und Hausnummer ein",
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildInputField(
+                      label: "Straße",
+                      icon: Icons.home,
+                      controller: streetController,
+                      hint: "Musterstraße",
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: _buildInputField(
+                      label: "Hausnummer",
+                      icon: Icons.home,
+                      controller: houseNumberController,
+                      hint: "1",
+                    ),
+                  ),
+                ],
               ),
               Row(
                 children: [
@@ -90,7 +196,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                       label: "Postleitzahl",
                       icon: Icons.pin_drop,
                       controller: postalCodeController,
-                      hint: "Postleitzahl",
+                      hint: "12345",
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -99,29 +205,27 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                       label: "Stadt",
                       icon: Icons.location_city,
                       controller: cityController,
-                      hint: "Stadt",
+                      hint: "Musterstadt",
                     ),
                   ),
                 ],
               ),
-              _buildDatePickerField(
+              _buildInputField(
                 label: "Geburtsdatum",
                 icon: Icons.calendar_today,
                 controller: birthDateController,
+                hint: "01.01.2000",
               ),
               _buildGenderField(),
               _buildInputField(
                 label: "Telefonnummer",
                 icon: Icons.phone,
                 controller: phoneNumberController,
-                hint: "Geben Sie Ihre Telefonnummer ein",
+                hint: "+49123456789",
               ),
-              _buildInputField(
-                label: "Passwort",
-                icon: Icons.lock,
-                controller: passwordController,
-                hint: "Geben Sie Ihr Passwort ein",
-                isPassword: true,
+              ElevatedButton(
+                onPressed: _saveUserData,
+                child: const Text("Profil speichern"),
               ),
             ],
           ),
@@ -162,7 +266,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     required IconData icon,
     required TextEditingController controller,
     String hint = "",
-    bool isPassword = false,
+    bool isEnabled = true,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -184,71 +288,14 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
         const SizedBox(height: 8),
         TextField(
           controller: controller,
-          obscureText: isPassword,
+          enabled: isEnabled,
           decoration: InputDecoration(
             hintText: hint,
             border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(8)),
             ),
             filled: true,
-            fillColor: Colors.white,
-          ),
-        ),
-        const SizedBox(height: 16),
-      ],
-    );
-  }
-
-  Widget _buildDatePickerField({
-    required String label,
-    required IconData icon,
-    required TextEditingController controller,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Icon(icon, color: const Color(0xFF029AE8)),
-            const SizedBox(width: 8),
-            Text(
-              label,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        GestureDetector(
-          onTap: () async {
-            DateTime? selectedDate = await showDatePicker(
-              context: context,
-              initialDate: DateTime.now(),
-              firstDate: DateTime(1900),
-              lastDate: DateTime.now(),
-            );
-            if (selectedDate != null) {
-              setState(() {
-                controller.text = "${selectedDate.day.toString().padLeft(2, '0')}.${selectedDate.month.toString().padLeft(2, '0')}.${selectedDate.year}";
-              });
-            }
-          },
-          child: AbsorbPointer(
-            child: TextField(
-              controller: controller,
-              decoration: const InputDecoration(
-                hintText: "Wählen Sie Ihr Geburtsdatum",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
-                ),
-                filled: true,
-                fillColor: Colors.white,
-                suffixIcon: Icon(Icons.calendar_today),
-              ),
-            ),
+            fillColor: isEnabled ? Colors.white : Colors.grey[200],
           ),
         ),
         const SizedBox(height: 16),
