@@ -223,9 +223,25 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                 controller: phoneNumberController,
                 hint: "+49123456789",
               ),
-              ElevatedButton(
-                onPressed: _saveUserData,
-                child: const Text("Profil speichern"),
+              Center(
+                child: ElevatedButton(
+                  onPressed: _saveUserData,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF029AE8), // Blau
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 64.0),
+                  ),
+                  child: const Text(
+                    "Profil speichern",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
