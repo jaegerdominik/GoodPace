@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import '../services/training/training_service.dart';
 import '../widgets/bottom_nav_bar.dart';
 import 'dashboard_screen.dart';
 import 'knowledge_screen.dart';
@@ -13,6 +14,8 @@ class TrainingScreen extends StatefulWidget {
 }
 
 class _TrainingScreenState extends State<TrainingScreen> {
+  final TrainingService _trainingService = TrainingService();
+
   String? selectedTraining;
   bool isTraining = false;
   String timerDisplay = "00:00:00,00";
@@ -93,32 +96,66 @@ class _TrainingScreenState extends State<TrainingScreen> {
 
   void toggleTimer() {
     if (isTraining) {
-      timer?.cancel();
+      stopTraining();
     } else {
-      timer = Timer.periodic(const Duration(milliseconds: 10), (_) {
-        setState(() {
-          duration = duration + const Duration(milliseconds: 10);
-          final hours = duration.inHours.toString().padLeft(2, '0');
-          final minutes = (duration.inMinutes % 60).toString().padLeft(2, '0');
-          final seconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
-          final milliseconds =
-          (duration.inMilliseconds % 1000 ~/ 10).toString().padLeft(2, '0');
-          timerDisplay = "$hours:$minutes:$seconds,$milliseconds";
-        });
-      });
+      startTimer();
     }
+  }
+
+  void startTimer() {
+    timer = Timer.periodic(const Duration(milliseconds: 10), (_) {
+      setState(() {
+        duration = duration + const Duration(milliseconds: 10);
+        final hours = duration.inHours.toString().padLeft(2, '0');
+        final minutes = (duration.inMinutes % 60).toString().padLeft(2, '0');
+        final seconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
+        final milliseconds =
+        (duration.inMilliseconds % 1000 ~/ 10).toString().padLeft(2, '0');
+        timerDisplay = "$hours:$minutes:$seconds,$milliseconds";
+      });
+    });
     setState(() {
-      isTraining = !isTraining;
+      isTraining = true;
     });
   }
 
-  void resetTimer() {
+  void stopTraining() {
     timer?.cancel();
+    saveTrainingData();
+    resetTimer();
+  }
+
+  void resetTimer() {
     setState(() {
       duration = const Duration();
       timerDisplay = "00:00:00,00";
       isTraining = false;
     });
+  }
+
+  Future<void> saveTrainingData() async {
+    try {
+      await _trainingService.saveTrainingData(
+        selectedTraining: selectedTraining ?? "Unbekanntes Training",
+        duration: duration,
+        distance: distanz,
+        pace: tempo,
+        calories: _trainingService.generateRandomCalories(),
+        heartRate: _trainingService.generateRandomHeartRate(),
+        vo2Max: _trainingService.generateRandomVo2Max(),
+        lactateThreshold: _trainingService.generateRandomLactateThreshold(),
+        recoveryTime: _trainingService.generateRandomRecoveryTime(),
+        cadence: _trainingService.generateRandomCadence(),
+        spo2: _trainingService.generateRandomSpo2(),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Training erfolgreich gespeichert.")),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Fehler beim Speichern des Trainings: $e")),
+      );
+    }
   }
 
   @override
@@ -216,13 +253,10 @@ class _TrainingScreenState extends State<TrainingScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Text(
-                      timerDisplay,
-                      style: const TextStyle(
-                          fontSize: 36, fontWeight: FontWeight.bold),
-                    ),
+                  Text(
+                    timerDisplay,
+                    style: const TextStyle(
+                        fontSize: 36, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.5,
@@ -237,7 +271,7 @@ class _TrainingScreenState extends State<TrainingScreen> {
                       ),
                       child: Text(
                         isTraining ? "Stop Training" : "Start Training",
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
@@ -276,31 +310,6 @@ class _TrainingScreenState extends State<TrainingScreen> {
                   ),
                 ))
                     .toList(),
-              ),
-            ),
-            const SizedBox(height: 16),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.75,
-              child: Align(
-                alignment: Alignment.center,
-                child: ElevatedButton(
-                  onPressed: resetTimer,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF029AE8),
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 64.0),
-                  ),
-                  child: const Text(
-                    "Finish Training",
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
               ),
             ),
           ],

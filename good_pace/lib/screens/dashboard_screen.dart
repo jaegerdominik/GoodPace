@@ -1,297 +1,294 @@
-import 'dart:math';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/data/dto/user.dart';
-import 'package:flutter_app/data/provider/default_provider.dart';
-import 'package:flutter_app/helper/spacer.dart';
-import 'package:flutter_app/screens/log_in_screen.dart';
-import 'package:flutter_app/screens/training_screen.dart';
-import 'package:flutter_app/screens/profile_edit_screen.dart';
-import 'package:flutter_app/widgets/bottom_nav_bar.dart';
-import 'package:flutter_app/widgets/custom_rounded_card.dart';
-import 'package:flutter_app/widgets/personal_information_widget.dart';
-import 'package:flutter_app/widgets/popup/match_popup.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-
+import '../services/training/training_service.dart';
+import '../widgets/bottom_nav_bar.dart';
 import 'knowledge_screen.dart';
+import 'training_screen.dart';
+import 'profile_edit_screen.dart';
 
-class DashboardScreen extends HookConsumerWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final swipes = ref.watch(swipesProvider);
-    final currentSwipe =
-        useState<User?>(swipes.isNotEmpty ? swipes.first : null);
-    final matches = ref.watch(matchesProvider);
-    final selectedIndex = useState(0);
-    var rnd = useState(Random());
+  _DashboardScreenState createState() => _DashboardScreenState();
+}
 
-    void onNavBarTap(int index) {
-      selectedIndex.value = index;
+class _DashboardScreenState extends State<DashboardScreen> {
+  final TrainingService _trainingService = TrainingService();
+  Map<String, dynamic>? lastActivityData;
+  bool isLoading = true;
 
-      switch (index) {
-        case 0:
-          break;
-        case 1:
-          Navigator.push(context, MaterialPageRoute(builder: (context) => KnowledgeScreen()));
-          break;
-        case 2:
-          Navigator.push(context, MaterialPageRoute(builder: (context) => TrainingScreen()));
-          break;
-        case 3:
-          Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileEditScreen()));
-          break;
-      }
+  @override
+  void initState() {
+    super.initState();
+    _loadLastActivity();
+  }
+
+  Future<void> _loadLastActivity() async {
+    try {
+      final data = await _trainingService.getLastTrainingData();
+      setState(() {
+        lastActivityData = data;
+      });
+    } catch (e) {
+      print("Fehler beim Laden der letzten Aktivität: $e");
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final selectedIndex = 0;
 
     return Scaffold(
       appBar: AppBar(
         elevation: 0.5,
-        centerTitle: true,
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            GestureDetector(
-              child: const SizedBox(
-                width: 40,
-                height: 40,
-                child: Icon(
-                  Icons.person,
-                  color: Colors.black,
-                ),
-              ),
-              onTap: () => {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const ProfileEditScreen()),
-                ),
-              },
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: Image(
-                    image: AssetImage('assets/logo/logo_large.png'),
-                  ),
-                ),
-                Text(
-                  "DINDER",
-                  style: TextStyle(color: Color(0xFFA93226)),
-                )
-              ],
-            ),
-            GestureDetector(
-              child: const SizedBox(
-                width: 40,
-                height: 40,
-                child: Icon(
-                  Icons.message,
-                  color: Colors.black,
-                ),
-              ),
-              onTap: () => {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const TrainingScreen()),
-                ),
-              },
-            ),
-          ],
+        iconTheme: const IconThemeData(
+          color: Color(0xFFFFAFD4),
+        ),
+        title: const Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "Dashboard",
+            style: TextStyle(color: Color(0xFFFFAFD4)),
+          ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Container(
+        color: const Color(0xFFDEF1FF),
+        padding: const EdgeInsets.all(16.0),
+        child: ListView(
           children: [
-            if (currentSwipe.value != null)
-              Expanded(
-                child: CustomRoundedCard(
-                  color: const Color(0xFFE5E5E5),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const SpacerSmall(),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(children: [
-                                Text(
-                                    currentSwipe.value!.name +
-                                        ", " +
-                                        currentSwipe.value!.age.toString(),
-                                    style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold)),
-                              ]),
-                              const SpacerXSmall(),
-                              const Text("Occupation:"),
-                              Row(
-                                children: [
-                                  const SpacerSmall(),
-                                  Text(currentSwipe.value!.occupation)
-                                ],
-                              ),
-                              const Text("Hobbies:"),
-                              PersonalInformationWidget(
-                                  list: currentSwipe.value!.hobbies),
-                              const Text("Hair Color:"),
-                              Row(
-                                children: [
-                                  const SpacerSmall(),
-                                  Text(currentSwipe.value!.hairColor)
-                                ],
-                              ),
-                              const Text("Eye Color:"),
-                              Row(
-                                children: [
-                                  const SpacerSmall(),
-                                  Text(currentSwipe.value!.eyeColor)
-                                ],
-                              ),
-                              const Text("Music I like:"),
-                              PersonalInformationWidget(
-                                  list: currentSwipe.value!.music),
-                              const Text("I'm known for:"),
-                              Row(
-                                children: [
-                                  const SpacerSmall(),
-                                  Text(currentSwipe.value!.knownFor)
-                                ],
-                              ),
-                              const Text("Unpopular opinion:"),
-                              Row(
-                                children: [
-                                  const SpacerSmall(),
-                                  Text(currentSwipe.value!.opinion)
-                                ],
-                              ),
-                              const Text("About me:"),
-                              Row(
-                                children: [
-                                  const SpacerSmall(),
-                                  Text(currentSwipe.value!.aboutMe)
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+            const Text(
+              "Leistungszustand",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF029AE8),
               ),
-            if (swipes.isEmpty)
-              const Text("No more Sexy Girls in your Area"),
-            Column(
+            ),
+            const SizedBox(height: 8),
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.grey.shade300),
+              ),
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  const Icon(Icons.bar_chart, color: Color(0xFF029AE8), size: 40),
+                  const SizedBox(width: 16),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text("Ausgezeichnet", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                      Text("VO2max", style: TextStyle(fontSize: 16, color: Colors.grey)),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              "Überblick",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF029AE8),
+              ),
+            ),
+            const SizedBox(height: 8),
+            GridView.count(
+              shrinkWrap: true,
+              crossAxisCount: 2,
+              crossAxisSpacing: 8.0,
+              mainAxisSpacing: 8.0,
+              childAspectRatio: 2,
+              physics: const NeverScrollableScrollPhysics(),
               children: [
-                const Divider(
-                  color: Colors.black,
-                ),
-                const SpacerXSmall(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          var nextSwipe;
-                          if (swipes.isNotEmpty &&
-                              currentSwipe.value != null) {
-                            if (rnd.value.nextDouble() < 0.25) {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    Future.delayed(const Duration(seconds: 3),
-                                        () {
-                                      Navigator.of(context).pop(true);
-                                    });
-                                    return MatchPopup();
-                                  });
-                              matches.add(currentSwipe.value!);
-                              swipes.remove(currentSwipe.value);
-                              print(swipes.length);
-                              if (swipes.isEmpty) {
-                                currentSwipe.value = null;
-                              }
-                            }
-                          }
-                          if (swipes.isNotEmpty) {
-                            if (swipes.length > 1) {
-                              do {
-                                nextSwipe = swipes[
-                                    rnd.value.nextInt(swipes.length)];
-                              } while (nextSwipe == currentSwipe.value);
-                              currentSwipe.value = nextSwipe;
-                            } else {
-                              currentSwipe.value = swipes.first;
-                            }
-                          }
-                        },
-                        child: const SizedBox(
-                          width: 40,
-                          height: 40,
-                          child: Image(
-                            image: AssetImage('assets/icons/yes_icon.jpg'),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 40,
-                      child: VerticalDivider(
-                        color: Colors.black,
-                        width: 1,
-                        thickness: 1,
-                      ),
-                    ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          if (swipes.length == 1) {
-                            currentSwipe.value = null;
-                            return;
-                          }
-                          var nextSwipe;
-                          do {
-                            nextSwipe = swipes
-                                [rnd.value.nextInt(swipes.length)];
-                          } while (nextSwipe == currentSwipe.value);
-                          currentSwipe.value = nextSwipe;
-                        },
-                        child: const SizedBox(
-                          width: 40,
-                          height: 40,
-                          child: Image(
-                            image: AssetImage('assets/icons/no_icon.png'),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SpacerXSmall(),
+                _buildOverviewTile("Herzfrequenz", "80 bpm\nIn Ruhe: 60 bpm", Icons.favorite),
+                _buildOverviewTile("VO2max", "55 ml/kg/min", Icons.show_chart),
+                _buildOverviewTile("Laktatschwelle", "176 bpm\n4:33 min/km", Icons.speed),
+                _buildOverviewTile("Erholungszeit", "16 Stunden", Icons.access_time),
+                _buildOverviewTile("Kalorienverbrauch", "1500 kcal", Icons.local_fire_department),
+                _buildOverviewTile("Kadenz", "159 spm", Icons.directions_run),
+                _buildOverviewTile("SpO2", "98%", Icons.bloodtype),
+                _buildOverviewTile("Pace", "5:45 min/km", Icons.timer),
               ],
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              "Trainingsvorschlag",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF029AE8),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.grey.shade300),
+              ),
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: const [
+                  Icon(Icons.directions_run, color: Color(0xFF029AE8), size: 40),
+                  SizedBox(width: 16),
+                  Text("Langsamer Dauerlauf", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              "Letzte Aktivität",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF029AE8),
+              ),
+            ),
+            const SizedBox(height: 8),
+            isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : lastActivityData == null
+                ? const Text("Keine Aktivität verfügbar.")
+                : Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.grey.shade300),
+              ),
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Laufen am ${lastActivityData!['timestamp'].toDate()}",
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  Text(
+                    "Distanz: ${lastActivityData!['distance']}",
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  Text(
+                    "Pace: ${lastActivityData!['pace']}",
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  Text(
+                    "Laufzeit: ${lastActivityData!['duration']}",
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  Text(
+                    "Schrittfrequenz: ${lastActivityData!['cadence']} spm",
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  Text(
+                    "Herzfrequenz: ${lastActivityData!['heart_rate']}",
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  Text(
+                    "Kalorien: ${lastActivityData!['calories_burned']} kcal",
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              "Empfohlene Ernährung",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF029AE8),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.grey.shade300),
+              ),
+              padding: const EdgeInsets.all(16.0),
+              child: const Text(
+                "• Banane (Kohlenhydrate)\n• 0.5 l Wasser\n• Gemüse",
+                style: TextStyle(fontSize: 16),
+              ),
             ),
           ],
         ),
       ),
       bottomNavigationBar: BottomNavBarWidget(
-        currentIndex: selectedIndex.value,
-        onTap: onNavBarTap,
+        currentIndex: selectedIndex,
+        onTap: (index) {
+          switch (index) {
+            case 0:
+              break; // Bereits auf Dashboard
+            case 1:
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const KnowledgeScreen()),
+              );
+              break;
+            case 2:
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const TrainingScreen()),
+              );
+              break;
+            case 3:
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const ProfileEditScreen()),
+              );
+              break;
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _buildOverviewTile(String title, String data, IconData icon) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      padding: const EdgeInsets.all(16.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: const Color(0xFF029AE8), size: 24),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  data,
+                  style: const TextStyle(fontSize: 14, color: Colors.grey),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
