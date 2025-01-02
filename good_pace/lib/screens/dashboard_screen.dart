@@ -14,13 +14,31 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   final TrainingService _trainingService = TrainingService();
+  Map<String, dynamic> averageData = {};
   Map<String, dynamic>? lastActivityData;
-  bool isLoading = true;
+  bool isLoadingOverview = true;
+  bool isLoadingLastActivity = true;
 
   @override
   void initState() {
     super.initState();
+    _loadOverviewData();
     _loadLastActivity();
+  }
+
+  Future<void> _loadOverviewData() async {
+    try {
+      final data = await _trainingService.getAverageTrainingData();
+      setState(() {
+        averageData = data;
+      });
+    } catch (e) {
+      print("Fehler beim Laden der Durchschnittsdaten: $e");
+    } finally {
+      setState(() {
+        isLoadingOverview = false;
+      });
+    }
   }
 
   Future<void> _loadLastActivity() async {
@@ -33,9 +51,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
       print("Fehler beim Laden der letzten Aktivität: $e");
     } finally {
       setState(() {
-        isLoading = false;
+        isLoadingLastActivity = false;
       });
     }
+  }
+
+  String _formatDate(DateTime date) {
+    return "${date.day.toString().padLeft(2, '0')}.${date.month.toString().padLeft(2, '0')}.${date.year}";
   }
 
   @override
@@ -104,7 +126,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ),
             const SizedBox(height: 8),
-            GridView.count(
+            isLoadingOverview
+                ? const Center(child: CircularProgressIndicator())
+                : GridView.count(
               shrinkWrap: true,
               crossAxisCount: 2,
               crossAxisSpacing: 8.0,
@@ -112,14 +136,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
               childAspectRatio: 2,
               physics: const NeverScrollableScrollPhysics(),
               children: [
-                _buildOverviewTile("Herzfrequenz", "80 bpm\nIn Ruhe: 60 bpm", Icons.favorite),
-                _buildOverviewTile("VO2max", "55 ml/kg/min", Icons.show_chart),
-                _buildOverviewTile("Laktatschwelle", "176 bpm\n4:33 min/km", Icons.speed),
+                _buildOverviewTile("Herzfrequenz", "${averageData['heart_rate'] ?? '-'} bpm", Icons.favorite),
+                _buildOverviewTile("VO2max", "${averageData['vo2max'] ?? '-'} ml/kg/min", Icons.show_chart),
+                _buildOverviewTile("Laktatschwelle", "${averageData['lactate_threshold'] ?? '-'} bpm", Icons.speed),
                 _buildOverviewTile("Erholungszeit", "16 Stunden", Icons.access_time),
-                _buildOverviewTile("Kalorienverbrauch", "1500 kcal", Icons.local_fire_department),
-                _buildOverviewTile("Kadenz", "159 spm", Icons.directions_run),
+                _buildOverviewTile("Kalorienverbrauch", "${averageData['calories_burned'] ?? '-'} kcal", Icons.local_fire_department),
+                _buildOverviewTile("Kadenz", "${averageData['cadence'] ?? '-'} spm", Icons.directions_run),
                 _buildOverviewTile("SpO2", "98%", Icons.bloodtype),
-                _buildOverviewTile("Pace", "5:45 min/km", Icons.timer),
+                _buildOverviewTile("Pace", "${averageData['pace'] ?? '-'} min/km", Icons.timer),
               ],
             ),
             const SizedBox(height: 16),
@@ -158,7 +182,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ),
             const SizedBox(height: 8),
-            isLoading
+            isLoadingLastActivity
                 ? const Center(child: CircularProgressIndicator())
                 : lastActivityData == null
                 ? const Text("Keine Aktivität verfügbar.")
@@ -174,7 +198,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Laufen am ${lastActivityData!['timestamp'].toDate()}",
+                    "Laufen am ${_formatDate(lastActivityData!['timestamp'].toDate())}",
                     style: const TextStyle(fontSize: 16),
                   ),
                   Text(
