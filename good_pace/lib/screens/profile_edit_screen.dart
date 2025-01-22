@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/screens/log_in_screen.dart';
 import '../services/user/user_service.dart';
 import '../widgets/bottom_nav_bar.dart';
 import 'dashboard_screen.dart';
@@ -239,6 +241,35 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16), // Abstand zwischen Buttons
+              Center(
+                child: TextButton(
+                  onPressed: () async {
+                    try {
+                      await FirebaseAuth.instance.signOut();
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LogInScreen(),
+                        ),
+                      );
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Logout fehlgeschlagen: $e')),
+                      );
+                    }
+                  },
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.red
+                  ),
+                  child: const Text("Logout",
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      color: Colors.red,
                     ),
                   ),
                 ),

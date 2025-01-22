@@ -17,19 +17,23 @@ class BottomNavBarWidget extends StatelessWidget {
       onTap: onTap,
       items: const [
         BottomNavigationBarItem(
-          icon: Icon(Icons.home),
+          icon: ImageIcon(
+              AssetImage('assets/icons/home.png')),
           label: 'Home',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.search),
-          label: 'Discover',
+          icon: ImageIcon(
+              AssetImage('assets/icons/knowledge.png')),
+          label: 'Knowledge',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.favorite),
-          label: 'Matches',
+          icon: ImageIcon(
+              AssetImage('assets/icons/timer.png')),
+          label: 'Training',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.person),
+          icon: ImageIcon(
+              AssetImage('assets/icons/user.png')),
           label: 'Profile',
         ),
       ],
