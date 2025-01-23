@@ -1,70 +1,76 @@
 import 'package:flutter/material.dart';
-import '../widgets/bottom_nav_bar.dart';
-import 'dashboard_screen.dart';
-import 'training_screen.dart';
-import 'profile_edit_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class KnowledgeDetailsScreen extends StatelessWidget {
   final String title;
 
-  const KnowledgeDetailsScreen({Key? key, required this.title}) : super(key: key);
+  const KnowledgeDetailsScreen({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
-    final selectedIndex = 1;
-
     return Scaffold(
       appBar: AppBar(
-        elevation: 0.5,
+        title: Text(title,
+          style: const TextStyle(
+            color: Color(0xFFFFAFD4),
+          ),
+        ),
         backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(
-          color: Color(0xFFFFAFD4),
-        ),
-        title: Text(
-          title,
-          style: const TextStyle(color: Color(0xFFFFAFD4)),
-        ),
+        iconTheme: const IconThemeData(color: Color(0xFFFFAFD4)),
       ),
       body: Container(
         color: const Color(0xFFDEF1FF),
         padding: const EdgeInsets.all(16.0),
-        child: const Center(
-          child: Text(
-            "Detailed Information here",
-            style: TextStyle(
-              fontSize: 18,
-              color: Colors.black,
-            ),
-          ),
+        child: StreamBuilder<DocumentSnapshot>(
+          stream: FirebaseFirestore.instance.collection('knowledge').doc(title).snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (!snapshot.hasData || !snapshot.data!.exists) {
+              return const Center(child: Text("Keine Daten verfügbar."));
+            }
+
+            final List<dynamic> faqList = snapshot.data!.get('questions') as List<dynamic>;
+
+            return ListView.builder(
+              itemCount: faqList.length,
+              itemBuilder: (context, index) {
+                final item = faqList[index] as Map<String, dynamic>;
+                return Card(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: ExpansionTile(
+                      tilePadding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      title: Text(
+                        item['question'] ?? '',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Color(0xFF029AE8),
+                        ),
+                      ),
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            item['answer'] ?? '',
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          },
         ),
-      ),
-      bottomNavigationBar: BottomNavBarWidget(
-        currentIndex: selectedIndex,
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const DashboardScreen()),
-              );
-              break;
-            case 1:
-              Navigator.pop(context);
-              break;
-            case 2:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const TrainingScreen()),
-              );
-              break;
-            case 3:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const ProfileEditScreen()),
-              );
-              break;
-          }
-        },
       ),
     );
   }
