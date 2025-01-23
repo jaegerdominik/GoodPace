@@ -147,7 +147,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
               const Center(
                 child: CircleAvatar(
                   radius: 50,
-                  backgroundImage: AssetImage('assets/logo/logo.png'),
+                  backgroundImage: AssetImage('assets/profilePictures/profile_picture.png'),
                 ),
               ),
               const SizedBox(height: 16),
@@ -245,7 +245,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 16), // Abstand zwischen Buttons
+              const SizedBox(height: 16),
               Center(
                 child: TextButton(
                   onPressed: () async {
